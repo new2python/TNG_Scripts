@@ -63,7 +63,7 @@ def retrieve_POS_reports():
 			
 			#Computac print files do not contain an extension
 			if list(os.path.splitext(filename))[1] == "":
-				filepath = open(os.path.join("C:\\", "Temp_Email", filename + "_" + str(i)), 'wb')
+				filepath = open(os.path.join("C:\\", "Temp_Email", filename + "_" + str(i)) + ".txt", 'wb')
 				filepath.write(part.get_payload(decode=1))
 				filepath.close()
 				print(os.path.join("C:", "Temp_Email", filename + "_" + str(i)))
@@ -74,3 +74,5 @@ def retrieve_POS_reports():
 	popObj.quit()
 	sys.exit(0)
 
+
+retrieve_POS_reports()
