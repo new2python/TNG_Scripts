@@ -18,10 +18,12 @@ app = Application().start("C:\\Bluvista\\bluvista.exe /stp=specialty_550.stp")
 time.sleep(5)
 
 #login
-pyautogui.typewrite('taskbot3',0.25)
+login = input("Login")
+password = input("Password")
+pyautogui.typewrite(login,0.25)
 pyautogui.typewrite('\n')
 time.sleep(2)
-pyautogui.typewrite('alsbridge',0.25)
+pyautogui.typewrite(password,0.25)
 pyautogui.typewrite('\n')
 time.sleep(2)
 
