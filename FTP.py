@@ -8,8 +8,11 @@
 import ftplib
 import os
 
+login = input("Login")
+password = input("Password")
+
 ftp = ftplib.FTP("192.168.1.9")
-ftp.login("taskbot3","alsbridge")
+ftp.login(login,password)
 
 #current working directory for Atlanta
 #TO DO: add parameter to update for each respective region
