@@ -8,15 +8,17 @@ import os
 import sys
 
 def retrieve_POS_reports():
+	#Request login details
+	login = input("Login")
+	pass_word = input("Password")
+	
 	#Set email protocol settings
 	host = '10.0.240.196'
-	user = 'svc_aataskbot3'
-	pass_word = '1R0bot2rule.them@ll'
 
 	#Connect to email exchange server
 	popObj = poplib.POP3_SSL(host)
 	print(popObj.getwelcome())
-	popObj.user(user)
+	popObj.user(login)
 	popObj.pass_(pass_word)
 
 	#returns message count and mailbox size in bytes
