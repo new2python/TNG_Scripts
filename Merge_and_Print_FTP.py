@@ -30,6 +30,10 @@ region_map = open("L:\\Merge and Print\\Region_Mapping.csv")
 read_csv = csv.reader(region_map)
 region_data = list(read_csv)
 
+#request login details
+login = input("Login")
+pasword = input("Password")
+
 #Process each region seperately
 count = 0
 for row in region_data:
@@ -49,7 +53,7 @@ for row in region_data:
 		
 		#open FTP session
 		ftp = ftplib.FTP(ip_address)
-		ftp.login("taskbot3", "alsbridge")
+		ftp.login(login, password)
 	
 		#navigate to the proper print directory
 		ftp.cwd(print_directory + "/#TB3PRT")
