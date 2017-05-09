@@ -6,20 +6,20 @@ import poplib
 import email
 import os
 import sys
+import re
+import csv
 
 def retrieve_POS_reports():
-	#Request login details
-	login = input("Login")
-	pass_word = input("Password")
-	
 	#Set email protocol settings
 	host = '10.0.240.196'
+	user = input("Username" + "\n")
+	password = input("Password" + "\n")
 
 	#Connect to email exchange server
 	popObj = poplib.POP3_SSL(host)
 	print(popObj.getwelcome())
-	popObj.user(login)
-	popObj.pass_(pass_word)
+	popObj.user(user)
+	popObj.pass_(password)
 
 	#returns message count and mailbox size in bytes
 	email_stat = popObj.stat()
@@ -43,8 +43,19 @@ def retrieve_POS_reports():
 		print(from_addr)
 		print(subject)
 		
+		#ignore any emails not part of the POS to AR process
 		if "sbtauto@thenewsgroup.com" not in from_addr:
 			continue
+		
+		#discard DRIVR reports - not used for evaluating POS
+		if "autsbt_drivr" in subject.lower():
+			#popObj.dele(i+1) #disabled for testing purposes
+			continue
+		
+		#Capture chain number and use to name the file
+		chain_regex = re.compile(r'\d{7}')
+		chain = chain_regex.search(subject)
+		chain = chain.group()
 		
 		#save the attachment
 		for part in str_message.walk():
@@ -61,14 +72,16 @@ def retrieve_POS_reports():
 			if not(filename): filename = "test.txt"
 			#print(filename)
 			
-			#TO DO - deposit download file to Merge and Print directory
-			
 			#Computac print files do not contain an extension
-			if list(os.path.splitext(filename))[1] == "":
-				filepath = open(os.path.join("C:\\", "Temp_Email", filename + "_" + str(i)) + ".txt", 'wb')
+			if list(os.path.splitext(filename))[1] == "": #captures file extension (if there is one).
+				filepath = open(os.path.join("L:\\", "POS_Reporting", chain + "_" + str(i)) + ".txt", 'wb')
 				filepath.write(part.get_payload(decode=1))
 				filepath.close()
-				print(os.path.join("C:", "Temp_Email", filename + "_" + str(i)))
+				print(os.path.join("L:", "POS_Reporting", chain + "_" + str(i) + ".txt"))
+				
+			#parse through recap reports
+			process_recap_reports(os.path.join("L:\\", "POS_Reporting", chain + "_" + str(i) + ".txt"), chain)
+			
 		print("\n")
 		#delete email after the attachment has been retrieved.
 		#popObj.dele(i+1) #disabled for testing purposes.
@@ -76,5 +89,69 @@ def retrieve_POS_reports():
 	popObj.quit()
 	sys.exit(0)
 
+def process_recap_reports(filepath, chain):
+	"""Parses through the SBT recap reports for POS totals"""
+	
+	#agency map
+	agency_map = {
+		"TNG CALGARY" : "Calgary",
+		"TNG HALIFAX" : "Halifax",
+		"TNG - ARIZONA" : "Arizona",
+		"TNG - JACKSON" : "Jackson",
+		"TNG - SPECIALTY" : "Specialty",
+		"TNG - TEXAS" : "Texas",
+		"TNG-ALASKA" : "Alaska",
+		"TNG - FIFE" : "Fife",
+		"TNG - HAWAII" : "Hawaii",
+		"TNG - ATLANTA" : "Atlanta",
+		"TNG - SACRAMENTO" : "Sacramento",
+		"TNG - SALT LAKE CITY" : "Salt Lake City",
+		"TNG ONTARIO" : "Toronto"
+		}
+	
+	text_file = open(filepath)
+	
+	grand_total_count = 0
+	line_count = 0
+	agency = ""
+	for line in text_file:
+		#assign agency
+		if "tng" in line.lower():
+			for i in agency_map.items():
+				if i[0] in line:
+					agency = i[1]
+		
+		if "grand totals:" in line.lower():
+			grand_total_count += 1
+			
+		#third instance of the string "grand totals" includes POS totals
+		if grand_total_count == 3:
+			pos_amount = re.search(r'\d.*', line)
+			pos_amount = pos_amount.group()
+			
+			#negative values need to be formatted
+			if "-" in pos_amount:
+				pos_amount = pos_amount.replace("-","")
+				pos_amount = -float(pos_amount)
+			
+			break
+			
+	text_file.close()
+	
+	#Record POS amounts to file.
+	record_pos_amounts(agency, chain, pos_amount)
+
+def record_pos_amounts(agency, dealer, pos_amount):
+	"""write POS amounts to file for further reference later"""
+	
+	outputWriter.writerow([agency, dealer, pos_amount])
+	
+	
+#open CSV file to record POS amounts
+output_file = open(os.path.join("L:\\", "POS_Reporting", "Dealer_Log.csv"), "w", newline = "")
+outputWriter = csv.writer(output_file)
 
 retrieve_POS_reports()
+
+#Close CSV file
+output_file.close()
