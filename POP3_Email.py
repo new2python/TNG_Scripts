@@ -9,8 +9,8 @@ import sys
 
 #Set email protocol settings
 host = '10.0.240.196'
-user = 'svc_aataskbot3'
-pass_word = '1R0bot2rule.them@ll'
+user = input("Username")
+pass_word = input("Password")
 
 #Connect to email exchange server
 popObj = poplib.POP3_SSL(host)
