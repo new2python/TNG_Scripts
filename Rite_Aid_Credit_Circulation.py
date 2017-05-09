@@ -147,7 +147,8 @@ update_workbook()
 WORD = "PRIMARY SEQ#:"
 
 #agency map
-agency_map = {"Atlanta" : "US_East",
+agency_map = {
+		"Atlanta" : "US_East",
 		"Jackson" : "US_Midwest",
 		"Specialty" : "Specialty",
 		"Texas" : "US_Central",
