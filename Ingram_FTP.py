@@ -12,8 +12,8 @@ import ftplib
 import os
 
 #setup login credentials
-login = 'jsparrow'
-passw = 'cabsauv69'
+login = input('login')
+passw = input('Password')
 host = 'secure-transfer.tng.com'
 
 #open FTP session
