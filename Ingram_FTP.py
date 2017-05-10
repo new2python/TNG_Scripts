@@ -5,7 +5,7 @@
 
 """
 	Periodically check Ingram FTP site for new files and 
-	deposit the respective directory according to filename.
+	deposit in the respective directory according to filename.
 """
 
 import ftplib
@@ -51,5 +51,22 @@ print(file_list)
 ftp.cwd('/TNG Uploads/3PL/Fee files')
 file_list = ftp.nlst()
 print(file_list)
+
+
+#############################################
+#                POS Files                  #
+#############################################
+
+#check POS file directory
+#Joan's
+ftp.cwd('/TNG Uploads/Accounts Receivable/POS JA')
+file_list = ftp.nlst()
+print("Joan's" + "\n", file_list)
+#Barnes and Noble
+ftp.cwd('/TNG Uploads/Accounts Receivable/POS BN')
+file_list = ftp.nlst()
+print("Barnes and Noble" + "\n", file_list)
+
+
 		
 ftp.quit()
