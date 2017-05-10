@@ -6,6 +6,11 @@
 """
 	Parses credit documents provided by Cowley & Benjamin and seperates into
 	seperate credits
+	Cowley and Benjamin files must be deposited in the "print file" directory
+	
+	To do:
+		-Add check to make sure the credit file is available, if not then skip the partner
+		-Clear any existing credit files that may still be in the target directory
 """
 
 import os
@@ -18,8 +23,8 @@ def stage_credits(partner):
 
 	path = os.path.join("L:", "Merge and Print", "Print_Files", partner)
 	file_list = os.listdir(path)
-
-	output_filepath = os.path.join("L:", "Merge and Print", "In_Process", partner)
+	
+	#output_filepath = os.path.join("L:", "Merge and Print", "In_Process", partner)
 
 	for file in file_list:
 		text_file = open(os.path.join(path, file))
