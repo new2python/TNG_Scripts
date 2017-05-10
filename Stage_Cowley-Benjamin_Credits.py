@@ -24,6 +24,8 @@ def stage_credits(partner):
 	path = os.path.join("L:", "Merge and Print", "Print_Files", partner)
 	file_list = os.listdir(path)
 	
+	input(len(file_list))
+	
 	#output_filepath = os.path.join("L:", "Merge and Print", "In_Process", partner)
 
 	for file in file_list:
