@@ -150,6 +150,8 @@ def record_pos_amounts(agency, dealer, pos_amount):
 #open CSV file to record POS amounts
 output_file = open(os.path.join("L:\\", "POS_Reporting", "Dealer_Log.csv"), "w", newline = "")
 outputWriter = csv.writer(output_file)
+#Record header
+outputWriter.writerow(['Agency','Chain_Master','POS_Amount'])
 
 retrieve_POS_reports()
 
