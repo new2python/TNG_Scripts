@@ -11,6 +11,7 @@ import ftplib
 import os
 import shutil
 import re
+import ctac_credentials
 
 #Agency map / naming conventions
 agency_map = {"TNG-ALASKA":"Alaska", 
@@ -30,9 +31,9 @@ region_map = open("L:\\Merge and Print\\Region_Mapping.csv")
 read_csv = csv.reader(region_map)
 region_data = list(read_csv)
 
-#request login details
-login = input("Login")
-pasword = input("Password")
+#gather credentials
+login = ctac_credentials.credentials['login']
+password = ctac_credentials.credentials['password']
 
 #Process each region seperately
 count = 0
@@ -63,6 +64,7 @@ for row in region_data:
 		
 		#download each file and save with a .txt extension
 		for file in file_list:
+			valid_file = True
 			#skip any SBT files that may be in the QUEUE
 			if "SBT" in file:
 				continue
@@ -101,6 +103,13 @@ for row in region_data:
 					stmt_date = stmt_regex.findall(line)
 					stmt_date = stmt_date[1]
 					print(stmt_date)
+					
+				if "REQUESTED BY     -" in line:
+					user = line.lower().replace("requested by     -", "")
+					if "taskbot 3 aa is" not in user:
+						print("Invalid User" + "\n", user)
+						valid_file = False
+						break
 				
 				# Determine agency name
 				if agency != "": #exit the loop once the agency has been assigned
@@ -116,6 +125,9 @@ for row in region_data:
 			print("\n")
 			
 			#Rename file
-			new_filename = local_directory + "\\" + agency + " " + document_type + ".txt"
-			os.rename(local_filename, new_filename)
+			if valid_file == True:
+				new_filename = local_directory + "\\" + agency + " " + document_type + ".txt"
+				os.rename(local_filename, new_filename)
+			else:
+				os.remove(local_filename)
 	ftp.quit()

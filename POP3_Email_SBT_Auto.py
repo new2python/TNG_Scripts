@@ -12,9 +12,11 @@ import csv
 def retrieve_POS_reports():
 	#Set email protocol settings
 	host = '10.0.240.196'
-	user = input("Username" + "\n")
-	password = input("Password" + "\n")
-
+	#user = input("Username" + "\n")
+	user = 'svc_aataskbot3'
+	#password = input("Password" + "\n")
+	password = '1R0bot2rule.them@ll'
+	
 	#Connect to email exchange server
 	popObj = poplib.POP3_SSL(host)
 	print(popObj.getwelcome())

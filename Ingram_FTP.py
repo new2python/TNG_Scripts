@@ -10,10 +10,14 @@
 
 import ftplib
 import os
+import ingram_credentials
 
 #setup login credentials
-login = input('login')
-passw = input('Password')
+#login = input('login')
+login = ingram_credentials.credentials['login']
+input(login)
+#passw = input('Password')
+passw = 'cabsauv69'
 host = 'secure-transfer.tng.com'
 
 #open FTP session
