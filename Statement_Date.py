@@ -5,8 +5,7 @@
 
 """
 	Based on today's date, find the current statement date.
-	i.e. Today is Wednesday, what statement week are we
-	currently working in? Previous Sunday
+	i.e. Today is Wednesday, find the current statement week.
 """
 
 import datetime
