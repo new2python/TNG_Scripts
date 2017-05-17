@@ -18,19 +18,29 @@ ctac = app.MDIframeCLBV
 app.windows()
 ctac.wait('ready')
 
-#time.sleep(2)
-print(ctac.WindowText())
-
 #copy screen contents to clipboard
 menu_item = ctac.MenuItem(u'&Edit->Copy &All')
 menu_item.Click()
 
 #print clipboard contents
+#print(pyperclip.paste())
 
-print(pyperclip.paste())
+screen_txt = pyperclip.paste()
+
+while "login" not in screen_txt.lower():
+	time.sleep(1)
+	menu_item = ctac.MenuItem(u'&Edit->Copy &All')
+	menu_item.Click()
+	
+ctac.type_keys("taskbot3")
+ctac.type_keys("{ENTER}")
+time.sleep(1)
+ctac.type_keys("alsbridge")
+ctac.type_keys("{ENTER}")
 
 
-ctac.minimize()
+
+#ctac.minimize()
 
 
 #app.kill()
