@@ -38,8 +38,18 @@ time.sleep(1)
 ctac.type_keys("alsbridge")
 ctac.type_keys("{ENTER}")
 
+menu_item = ctac.MenuItem(u"&Edit->Copy &All")
+menu_item.Click()
+screen_txt = pyperclip.paste()
 
+while "welcome" not in screen_txt.lower():
+	time.sleep(1)
+	menu_item = ctac.MenuItem(u"&Edit->Copy &All")
+	menu_item.Click()
+	screen_txt = pyperclip.paste()
 
+print("Sucessfully Logged In")
+	
 #ctac.minimize()
 
 
