@@ -1,15 +1,36 @@
 from pywinauto.application import Application
 import time
+import subprocess
+import pyperclip
 
+#computac session file
 stp = "/stp=marcatl.stp"
-app = Application().start("C:\\bluvista\\bluvista.exe %s" %stp)
+
+#open computac session
+subprocess.Popen('C:\\bluvista\\bluvista.exe %s' %stp)
+time.sleep(4)
+
+#connect to active session
+app = Application().Connect(title=u'BluVista: - [IBM3151A - MarcAtl.stp]', class_name='MDIframeCLBV')
+ctac = app.MDIframeCLBV
+#app = Application().start("C:\\bluvista\\bluvista.exe %s" %stp)
 
 app.windows()
-app_window = app.Bluvista
-app_window.wait('ready')
+ctac.wait('ready')
 
-app_window.minimize()
+#time.sleep(2)
+print(ctac.WindowText())
 
-app_window.print_control_identifiers()
+#copy screen contents to clipboard
+menu_item = ctac.MenuItem(u'&Edit->Copy &All')
+menu_item.Click()
 
-app.kill()
+#print clipboard contents
+
+print(pyperclip.paste())
+
+
+ctac.minimize()
+
+
+#app.kill()
